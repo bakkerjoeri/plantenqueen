@@ -1,0 +1,19 @@
+{
+  "name": "plantenqueen",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "parse-srt": "^1.0.0-alpha",
+    "typescript": "^4.1.3",
+    "vue": "^3.0.4"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.0.4",
+    "sass": "^1.30.0",
+    "sass-loader": "^10.1.0",
+    "vite": "^1.0.0-rc.13"
+  }
+}
