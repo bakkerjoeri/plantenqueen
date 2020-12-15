@@ -57,8 +57,15 @@
 	import { lyrics } from './lyrics';
 	import { choose } from 'roll-the-bones';
 	import parseSrt from 'parse-srt';
-
-	let stickerPool = ['1', '2', '3', '4', '5', '6', '9', '10', '11'];
+	import gif1 from '/src/assets/stickers/1.gif';
+	import gif2 from '/src/assets/stickers/2.gif';
+	import gif3 from '/src/assets/stickers/3.gif';
+	import gif4 from '/src/assets/stickers/4.gif';
+	import gif5 from '/src/assets/stickers/5.gif';
+	import gif6 from '/src/assets/stickers/6.gif';
+	import gif9 from '/src/assets/stickers/9.gif';
+	import gif10 from '/src/assets/stickers/10.gif';
+	import gif11 from '/src/assets/stickers/11.gif';
 
 	export default {
 		data() {
@@ -101,8 +108,7 @@
 				this.$refs.audioPlayer.play();
 			},
 			getRandomSticker() {
-				const chosenSticker = choose(stickerPool);
-				return `/src/assets/stickers/${choose(stickerPool)}.gif`;
+				return choose([gif1, gif2, gif3, gif4, gif5, gif6, gif9, gif10, gif11]);
 			},
 		},
 		mounted() {
@@ -116,7 +122,7 @@
 
 			window.setInterval(() => {
 				this.currentSticker = this.getRandomSticker();
-			}, 10000);
+			}, 8000);
 		},
 	};
 </script>
