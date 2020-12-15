@@ -1,49 +1,64 @@
 <template>
 	<div class="App">
-		<audio
-			class="NativePlayer"
-			ref="audioPlayer"
-			controls
-			src="/src/assets/plantenqueen.mp3"
-		/>
+		<div class="TitleCard" v-if="!hasStarted">
+			<h1 class="TitleCard__artist">COEN</h1>
+			<h2 class="TitleCard__songTitle">Planten Queen</h2>
+			<button class="TitleCard__start" @click="start">Zingen maar!</button>
+		</div>
 
-		<transition name="slide-fade">
-			<div class="TitleCard" v-if="!hasStarted">
-				<h1 class="TitleCard__artist">COEN</h1>
-				<h2 class="TitleCard__songTitle">Planten Queen</h2>
-				<button class="TitleCard__start" @click="start">Zingen maar!</button>
-			</div>
-		</transition>
-
-		<transition name="slide-fade">
-			<ul class="Lyrics" v-if="hasStarted">
-				<li
-					v-for="lyric in lyrics"
-					:key="lyric.id"
-					class="Lyric"
-					:class="{
-						'is-past': pastLyrics.includes(lyric),
-						'is-active': activeLyrics.includes(lyric),
-						'is-next-up': nextUpLyrics.includes(lyric),
-					}"
+		<ul
+			v-if="hasStarted"
+			class="Lyrics"
+		>
+			<li
+				v-for="lyric in lyrics"
+				:key="lyric.id"
+				class="Lyric"
+				:class="{
+					'is-past': pastLyrics.includes(lyric),
+					'is-active': activeLyrics.includes(lyric),
+					'is-next-up': nextUpLyrics.includes(lyric),
+				}"
+			>
+				<span
+					class="Lyric__text"
+					:style="activeLyrics.includes(lyric) ? {
+						backgroundPosition: `${Math.round(Math.max(0, 1 - Math.min(1, (position - lyric.start)/(lyric.end - lyric.start))) * 100)}% 0px`,
+					} : null"
 				>
-					<span
-						class="Lyric__text"
-						:style="activeLyrics.includes(lyric) ? {
-							backgroundPosition: `${Math.round(Math.max(0, 1 - Math.min(1, (position - lyric.start)/(lyric.end - lyric.start))) * 100)}% 0px`,
-						} : null"
-					>
-						{{ lyric.text }}
-					</span>
-				</li>
-			</ul>
-		</transition>
+					{{ lyric.text }}
+				</span>
+			</li>
+		</ul>
+
+		<div
+			v-if="hasStarted"
+			class="Sticker"
+		>
+			<img
+				:src="currentSticker"
+				class="Sticker__image"
+			/>
+		</div>
+
+		<audio
+			preload
+			class="NativePlayer"
+			:class="{ 'is-hidden': !hasStarted }"
+			ref="audioPlayer"
+			controls	
+		>
+			<source src="/src/assets/plantenqueen.mp3" type="audio/mpeg">
+		</audio>
 	</div>
 </template>
 
 <script>
 	import { lyrics } from './lyrics';
+	import { choose } from 'roll-the-bones';
 	import parseSrt from 'parse-srt';
+
+	let stickerPool = ['1', '2', '3', '4', '5', '6', '9', '10', '11'];
 
 	export default {
 		data() {
@@ -51,6 +66,8 @@
 				hasStarted: false,
 				position: 0,
 				lyrics: parseSrt(lyrics),
+				timeCodes: [],
+				currentSticker: this.getRandomSticker(),
 			};
 		},
 		computed: {
@@ -82,7 +99,11 @@
 			start() {
 				this.hasStarted = true;
 				this.$refs.audioPlayer.play();
-			}
+			},
+			getRandomSticker() {
+				const chosenSticker = choose(stickerPool);
+				return `/src/assets/stickers/${choose(stickerPool)}.gif`;
+			},
 		},
 		mounted() {
 			this.$refs.audioPlayer.addEventListener('timeupdate', (event) => {
@@ -92,6 +113,10 @@
 			this.$refs.audioPlayer.addEventListener('play', (event) => {
 				this.hasStarted = true;
 			});
+
+			window.setInterval(() => {
+				this.currentSticker = this.getRandomSticker();
+			}, 10000);
 		},
 	};
 </script>
@@ -128,8 +153,6 @@
 	.TitleCard__songTitle {
 		margin: 0;
 		color: white;
-		text-shadow: 2px 2px 24px gold, 0px 0px 10px black;
-		-webkit-text-stroke: 1px gold;
 	}
 
 	.TitleCard__artist {
@@ -144,17 +167,21 @@
 
 	.TitleCard__start {
 		cursor: pointer;
-		padding: 20px;
-		margin: 20px;
+		padding: 100px;
+		margin: 40px;
 		font-size: 3em;
 		font-weight: bold;
-		background-color: white;
-		border-radius: 20px;
 		border: none;
+		color: white;
 		transition: transform .2s ease;
+		background-color: transparent;
+		background-image: url('/src/assets/wateringcan.gif');
+		background-position: center center;
+		background-size: contain;
+		background-repeat: no-repeat;
 
 		&:hover {
-			transform: scale(1.2);
+			transform: scale(1.2) rotate(-9deg);
 		}
 	}
 
@@ -164,12 +191,17 @@
 		left: 0;
 		right: 0;
 		width: 100%;
+
+		&.is-hidden {
+			display: none;
+		}
 	}
 
 	.Lyrics {
+		pointer-events: none;
 		display: flex;
 		flex-direction: column;
-		transform: translateY(-40%);
+		transform: translateY(-50%);
 		text-align: center;
 	}
 
@@ -224,5 +256,19 @@
 		.Lyric.is-past & {
 			color: var(--fill-color);
 		}
+	}
+
+	.Sticker {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 50%;
+	}
+
+	.Sticker__image {
+		max-height: 80%;
 	}
 </style>

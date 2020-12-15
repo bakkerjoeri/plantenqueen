@@ -6,7 +6,9 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@bakkerjoeri/array-without": "^2.0.2",
     "parse-srt": "^1.0.0-alpha",
+    "roll-the-bones": "^1.1.0",
     "typescript": "^4.1.3",
     "vue": "^3.0.4"
   },
