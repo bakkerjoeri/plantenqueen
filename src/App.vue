@@ -66,6 +66,14 @@
 	import gif9 from '/src/assets/stickers/9.gif';
 	import gif10 from '/src/assets/stickers/10.gif';
 	import gif11 from '/src/assets/stickers/11.gif';
+	import gif12 from '/src/assets/stickers/giphy-1.gif';
+	import gif13 from '/src/assets/stickers/giphy-3.gif';
+	import gif14 from '/src/assets/stickers/giphy-4.gif';
+	import gif15 from '/src/assets/stickers/giphy-7.gif';
+	import gif16 from '/src/assets/stickers/giphy-8.gif';
+	import gif17 from '/src/assets/stickers/giphy-9.gif';
+	import gif18 from '/src/assets/stickers/giphy.gif';
+
 
 	export default {
 		data() {
@@ -108,7 +116,7 @@
 				this.$refs.audioPlayer.play();
 			},
 			getRandomSticker() {
-				return choose([gif1, gif2, gif3, gif4, gif5, gif6, gif9, gif10, gif11]);
+				return choose([gif1, gif2, gif3, gif4, gif5, gif6, gif9, gif10, gif11, gif12,gif13,gif14,gif15,gif16,gif17,gif18]);
 			},
 		},
 		mounted() {
