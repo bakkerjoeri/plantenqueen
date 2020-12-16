@@ -218,7 +218,7 @@
 		list-style: none;
 		font-family: sans-serif;
 		font-weight: bold;
-		font-size: 3em;
+		font-size: min(3em, 4.5vw);
 		transition: all 0.5s ease;
 
 		&.is-active,
